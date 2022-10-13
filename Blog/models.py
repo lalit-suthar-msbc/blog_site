@@ -32,6 +32,7 @@ class MyAccountManager(BaseUserManager):
 
 
 class Account(AbstractUser):
+    id=models.AutoField(primary_key=True)
     email = models.EmailField(max_length=50, verbose_name='email', unique=True)
     username = models.CharField(max_length=50, unique=True)
     date_joined = models.DateTimeField(verbose_name='Date joined', auto_now_add=True)
@@ -73,3 +74,28 @@ class Account(AbstractUser):
 
     def has_module_perms(self, app_label):
         return True
+
+
+class Category(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Blog(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(unique=True, max_length=500)
+    slug = models.CharField(unique=True, max_length=500)
+    author = models.ForeignKey(to=Account, on_delete=models.CASCADE)
+    # img_file = models.ImageField(upload_to='images/blog')
+    posted_on = models.DateField(auto_now_add=True)
+    last_edit = models.DateField(auto_now_add=True, null=True)
+    content = models.CharField(max_length=10000)
+    category = models.ForeignKey(to=Category, on_delete=models.CASCADE)
+    hidden = models.BooleanField(default=False)
+    viewers = models.ManyToManyField(to=Account, related_name='post_viewers')
+
+    def __str__(self):
+        return f"{self.title[:50]} by {self.author}"

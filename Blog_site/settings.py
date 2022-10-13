@@ -25,9 +25,9 @@ SECRET_KEY = '$+u49ycb6^g6r7e!d^+c^e_!92h1%*(i59eux&intiz+sm7eq2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
-
+# DJANGO_SETTINGS_MODULE=Blog_site.settings
 # Application definition
 
 INSTALLED_APPS = [
