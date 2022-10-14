@@ -76,14 +76,18 @@ def log_out(request):
     return HttpResponse("user is logged out")
 
 def add_blog(request):
-    if request.user.is_authenticated:
-        author=request.user
-        print(author)
-        title="demo2"
-        content="this is content 2323232"
-        category=Category.objects.filter(name="news")[0]
-        Blog.objects.create(author=author,slug="unique",title=title,content=content,category=category)
-        messages.info(request,"you blog is posted successfully")
-        return HttpResponse("blog is posted successfully")
+    if request.method =="POST":
+        if request.user.is_authenticated:
+
+            author=request.user
+            print(author)
+            title=request.POST.get("title")
+            slug=request.POST.get("slug")
+            content=request.POST.get("content")
+            category = request.POST.get("category")
+            Blog.objects.create(author=author,slug=slug,title=title,content=content,category=Category.objects.filter(name=category)[0])
+            messages.success(request,"you blog is posted successfully")
+            return redirect("add_blog")
+    return render(request,'add_blog.html',{'category':Category.objects.all()})
 
 
